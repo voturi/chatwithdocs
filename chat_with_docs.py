@@ -70,6 +70,16 @@ def calculate_embeddings_cost(texts):
     return total_tokens, total_tokens*0.00000006
 
 
+def clear_history():
+    if 'history' in st.session_state:
+        del st.session_state['history']
+
+
+def clear_input():
+    if 'query' in st.session_state:
+        del st.session_state['query']
+
+
 if __name__ == "__main__":
     import os
     from dotenv import load_dotenv, find_dotenv
@@ -87,9 +97,10 @@ if __name__ == "__main__":
             "Choose a file", type=['txt', 'pdf', 'docx', 'doc'])
 
         chunk_size = st.number_input(
-            'Enter Chunk Size', min_value=100, max_value=2048, value=512)
+            'Enter Chunk Size', min_value=100, max_value=2048, value=512, on_change=clear_history)
 
-        k = st.number_input('k', min_value=1, max_value=20, value=3)
+        k = st.number_input('k', min_value=1, max_value=20,
+                            value=3, on_change=clear_history)
 
         add_data = st.button('Add Data')
 
@@ -115,10 +126,23 @@ if __name__ == "__main__":
                 st.success('File uploaded, chunked and embedded Successfully')
 
     query = st.text_input(
-        'Enter your question about the content of your document:')
+        'Enter your question about the content of your document:', key='query')
     if query:
         if 'vs' in st.session_state:
             with st.spinner('Searching for answers...'):
                 answer = ask_and_get_answers(st.session_state.vs, query, k=k)
-                # st.text_area('Answer', value=answer)
-                st.success(answer)
+                st.success(f'Answer: {answer}')
+        else:
+            st.error('Please upload a document first')
+
+        st.divider()
+
+        if 'history' not in st.session_state:
+            st.session_state.history = ''
+
+        value = f'Q: {query}\nA: {answer}\n'
+        st.session_state.history = f'{value} \n {"-" * 100} \n {st.session_state.history}'
+        st.text_area('Chat History',
+                     value=st.session_state.history, key='history', height=400)
+
+    st.write('voturi@gmail.com')
