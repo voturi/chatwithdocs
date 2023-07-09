@@ -85,9 +85,9 @@ if __name__ == "__main__":
     from dotenv import load_dotenv, find_dotenv
     load_dotenv(find_dotenv(), override=True)
 
-    st.image('img.png')
+    # st.image('img.png')
     st.title('Chat with Documents')
-    st.subheader('LLM Question-Answer Application')
+    # st.subheader('upload and ask questions about your documents')
     with st.sidebar:
         api_key = st.text_input('Enter API Key', type='password')
         if api_key:
