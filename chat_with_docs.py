@@ -19,9 +19,9 @@ def load_document(file):
         data = loader.load()
         return data
     elif file.endswith('.docx'):
-        from langchain.document_loaders import DocxLoader
-        print(f'Loading File....{file}')
-        loader = DocxLoader(file)
+        from langchain.document_loaders import Docx2txtLoader
+        print(f'Loading {file}')
+        loader = Docx2txtLoader(file)
         data = loader.load()
         return data
     elif file.endswith('.doc'):
